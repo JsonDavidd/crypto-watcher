@@ -1,15 +1,24 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from "react"
+import fetchRankedAssets from "../lib/fetch-ranked-assets"
+import getPricesFromAssets from "../lib/get-prices-from-assets"
 
 const Home: NextPage = () => {
-  const [prices, setPrices] = useState<{ [key: string]: number }>()
+  const [prices, setPrices] = useState<{ [id: string]: number }>()
 
   useEffect(() => {
-    const pricesWs = new WebSocket("wss://ws.coincap.io/prices?assets=bitcoin,ethereum,monero,litecoin")
-    pricesWs.onmessage = ({ data }) => {
-      setPrices((prev) => ({ ...prev, ...JSON.parse(data) }))
-    }
+    fetchRankedAssets(10)
+      .then((assets) => {
+        const p = getPricesFromAssets(assets)
+        setPrices(p)
+
+        const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${Object.keys(p).join()}`)
+        pricesWs.onmessage = ({ data }) => {
+          setPrices((prev) => ({ ...prev, ...JSON.parse(data) }))
+        }
+      })
+      .catch((error) => console.error(error))
   }, [])
 
   return (
@@ -19,8 +28,8 @@ const Home: NextPage = () => {
         <meta name="description" content="Keep track of your favorite cryptos" />
       </Head>
       <ul>
-        {prices && Object.keys(prices).map((key, i) => (
-          <li key={"crypto" + i}>{key} = {prices[key]}</li>
+        {prices && Object.keys(prices).map((id, i) => (
+          <li key={"crypto" + i}>{id} = {prices[id]}</li>
         ))}
       </ul>
     </div>
