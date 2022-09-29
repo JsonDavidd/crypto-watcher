@@ -22,14 +22,14 @@ const Home: NextPage = () => {
   }, [])
 
   return (
-    <div>
+    <div className="min-h-screen bg-slate-100">
       <Head>
         <title>Crypto Watcher</title>
         <meta name="description" content="Keep track of your favorite cryptos" />
       </Head>
-      <ul>
+      <ul className="w-[90%] max-w-2xl mx-auto flex flex-col gap-[2px] bg-gray-200 shadow-md">
         {prices && Object.keys(prices).map((id, i) => (
-          <li key={"crypto" + i}>{id} = {prices[id]}</li>
+          <li key={"crypto" + i} className="px-6 py-4 bg-white">{id} = {prices[id]}</li>
         ))}
       </ul>
     </div>
