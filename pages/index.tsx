@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { useEffect, useState } from "react"
 import fetchRankedAssets from "../lib/fetch-ranked-assets"
 import getPricesFromAssets from "../lib/get-prices-from-assets"
+import onPricesUpdate from "../lib/on-prices-update"
 import AssetsModel from "../lib/types/assets-model"
 
 const Home: NextPage = () => {
@@ -17,13 +18,11 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (!assets) return
+
     const p = getPricesFromAssets(assets)
     setPrices(p)
 
-    const pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${Object.keys(p).join()}`)
-    pricesWs.onmessage = ({ data }) => {
-      setPrices((prev) => ({ ...prev, ...JSON.parse(data) }))
-    }
+    onPricesUpdate(Object.keys(p), (value) => setPrices((prev) => ({ ...prev, ...value })))
   }, [assets])
 
   return (
