@@ -22,12 +22,14 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (!cryptosWatched) return
 
-    onPricesUpdate(cryptosWatched, (value) => setAssets((prev) => prev?.map((x) => {
+    const { dismount } = onPricesUpdate(cryptosWatched, (value) => setAssets((prev) => prev?.map((x) => {
       if (value[x.id]) {
         x.priceUsd = value[x.id]
       }
       return x
     })))
+
+    return dismount
   }, [cryptosWatched])
 
   return (
