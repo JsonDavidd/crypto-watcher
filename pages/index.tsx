@@ -8,27 +8,27 @@ import AssetsModel from "../lib/types/assets-model"
 
 const Home: NextPage = () => {
   const [assets, setAssets] = useState<AssetsModel[]>()
+  const [cryptosWatched, setCryptosWatched] = useState<string[]>()
 
   useEffect(() => {
     fetchRankedAssets(10)
-      .then(setAssets)
+      .then((data) => {
+        setAssets(data)
+        setCryptosWatched(data.map((x) => x.id))
+      })
       .catch(console.error)
   }, [])
 
   useEffect(() => {
-    if (!assets) return
+    if (!cryptosWatched) return
 
-    onPricesUpdate(assets.map((x) => x.id), (value) => {
-      const a = assets.map((x) => {
-        if (value[x.id]) {
-          x.priceUsd = value[x.id]
-        }
-        return x
-      })
-
-      setAssets(a)
-    })
-  }, [assets])
+    onPricesUpdate(cryptosWatched, (value) => setAssets((prev) => prev?.map((x) => {
+      if (value[x.id]) {
+        x.priceUsd = value[x.id]
+      }
+      return x
+    })))
+  }, [cryptosWatched])
 
   return (
     <div className="min-h-screen bg-slate-100">
