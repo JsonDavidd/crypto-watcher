@@ -1,4 +1,6 @@
-const getPricesFromAssets = (assets: { id: string, priceUsd: number }[]): { [id: string]: number } => {
+import AssetsModel from "./types/assets-model"
+
+const getPricesFromAssets = (assets: AssetsModel[]): { [id: string]: number } => {
   return assets.reduce((t, { id, priceUsd }) => {
     t[id] = priceUsd
     return t
