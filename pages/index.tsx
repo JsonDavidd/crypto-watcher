@@ -8,7 +8,6 @@ import AssetsModel from "../lib/types/assets-model"
 
 const Home: NextPage = () => {
   const [assets, setAssets] = useState<AssetsModel[]>()
-  const [prices, setPrices] = useState<{ [id: string]: number }>()
 
   useEffect(() => {
     fetchRankedAssets(10)
@@ -19,10 +18,16 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (!assets) return
 
-    const p = getPricesFromAssets(assets)
-    setPrices(p)
+    onPricesUpdate(assets.map((x) => x.id), (value) => {
+      const a = assets.map((x) => {
+        if (value[x.id]) {
+          x.priceUsd = value[x.id]
+        }
+        return x
+      })
 
-    onPricesUpdate(Object.keys(p), (value) => setPrices((prev) => ({ ...prev, ...value })))
+      setAssets(a)
+    })
   }, [assets])
 
   return (
@@ -32,8 +37,14 @@ const Home: NextPage = () => {
         <meta name="description" content="Keep track of your favorite cryptos" />
       </Head>
       <ul className="w-[90%] max-w-2xl mx-auto flex flex-col gap-[2px] bg-gray-200 shadow-md">
-        {prices && Object.keys(prices).map((id, i) => (
-          <li key={"crypto" + i} className="px-6 py-4 bg-white">{id} = {prices[id]}</li>
+        {assets?.map(({ id, name, symbol, priceUsd }, i) => (
+          <li key={id} className="px-6 py-4 flex bg-white">
+            <div className="w-1/2 flex flex-col">
+              <span>{name}</span>
+              <small>{symbol}</small>
+            </div>
+            <span>{priceUsd} USD</span>
+          </li>
         ))}
       </ul>
     </div>
