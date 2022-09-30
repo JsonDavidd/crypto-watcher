@@ -17,6 +17,15 @@ const Home: NextPage = () => {
         setCryptosWatched(data.map((x) => x.id))
       })
       .catch(console.error)
+
+    setInterval(() => {
+      fetchRankedAssets(10)
+        .then((data) => {
+          setAssets(data)
+          setCryptosWatched(data.map((x) => x.id))
+        })
+        .catch(console.error)
+    }, 15000)
   }, [])
 
   useEffect(() => {
