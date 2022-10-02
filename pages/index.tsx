@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Link from "next/link"
 import { useEffect, useState } from "react"
 import fetchRankedAssets from "../lib/fetch-ranked-assets"
 import getPricesFromAssets from "../lib/get-prices-from-assets"
@@ -49,12 +50,14 @@ const Home: NextPage = () => {
       </Head>
       <ul className="w-[90%] max-w-2xl mx-auto flex flex-col gap-[2px] bg-gray-200 shadow-md">
         {assets?.map(({ id, name, symbol, priceUsd }, i) => (
-          <li key={id} className="px-6 py-4 flex bg-white">
-            <div className="w-1/2 flex flex-col">
-              <span>{name}</span>
-              <small>{symbol}</small>
-            </div>
-            <span>{priceUsd} USD</span>
+          <li key={id}>
+            <Link href={id}><a className="px-6 py-4 flex bg-white">
+              <div className="w-1/2 flex flex-col">
+                <span>{name}</span>
+                <small>{symbol}</small>
+              </div>
+              <span>{priceUsd} USD</span>
+            </a></Link>
           </li>
         ))}
       </ul>
