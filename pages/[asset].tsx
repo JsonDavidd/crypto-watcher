@@ -1,6 +1,7 @@
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import Charts from "../components/charts"
 import AssetsModel from "../lib/types/assets-model"
 
 const Asset: NextPage = () => {
@@ -36,11 +37,7 @@ const Asset: NextPage = () => {
     <div className="flex flex-col items-center">
       <h1>{values.name}</h1>
       <small><h2>{values.symbol}</h2></small>
-      <ul>
-        {history?.map(({ time, priceUsd }) => (
-          <li key={time}>{time} = {priceUsd}</li>
-        ))}
-      </ul>
+      <Charts width={300} height={100} coords={history?.map((x) => x.priceUsd / 1000) || []} />
     </div>
   )
 }
