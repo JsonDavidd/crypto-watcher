@@ -9,6 +9,7 @@ import HistoryDataModel from "../lib/types/history-data-model"
 const Asset: NextPage = () => {
   const [values, setValues] = useState<AssetsModel>()
   const [history, setHistory] = useState<HistoryDataModel>()
+  const [zoom, setZoom] = useState(1)
   const { query } = useRouter()
 
   useEffect(() => {
@@ -46,7 +47,12 @@ const Asset: NextPage = () => {
       <h1>{values.name}</h1>
       <small><h2>{values.symbol}</h2></small>
       <span>{values.priceUsd}</span>
-      <Charts width={300} height={100} data={history || []} name={values.name} zoom={16} />
+      <div className="flex items-centered gap-4">
+        <span>Zoom</span>
+        <button onClick={() => history && history.length / (zoom * 2) > 8 && setZoom(zoom * 2)} className="text-lg font-bold">+</button>
+        <button onClick={() => zoom > 1 && setZoom(zoom / 2)} className="text-lg font-bold">-</button>
+      </div>
+      <Charts width={300} height={100} data={history || []} name={values.name} {...{ zoom }} />
     </div>
   )
 }
