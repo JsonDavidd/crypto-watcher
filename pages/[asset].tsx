@@ -11,17 +11,18 @@ const Asset: NextPage = () => {
   const { query } = useRouter()
 
   useEffect(() => {
-    if (!query?.asset) return
+    const id = query?.asset
+    if (typeof id !== "string") return
 
     (async () => {
-      const response = await fetch(`https://api.coincap.io/v2/assets/${query?.asset}`)
+      const response = await fetch(`https://api.coincap.io/v2/assets/${id}`)
       const json = await response.json()
 
       setValues(json.data)
     })().catch(console.error);
 
     (async () => {
-      const response = await fetch(`https://api.coincap.io/v2/assets/${query?.asset}/history?interval=d1`)
+      const response = await fetch(`https://api.coincap.io/v2/assets/${id}/history?interval=d1`)
       const json = await response.json()
 
       setHistory(json.data)
