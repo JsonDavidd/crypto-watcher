@@ -2,6 +2,7 @@ import { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Charts from "../components/charts"
+import onPricesUpdate from "../lib/on-prices-update"
 import AssetsModel from "../lib/types/assets-model"
 import HistoryDataModel from "../lib/types/history-data-model"
 
@@ -27,6 +28,9 @@ const Asset: NextPage = () => {
 
       setHistory(json.data)
     })().catch(console.error)
+
+    onPricesUpdate([id], (data) =>
+      setValues((prev) => prev && ({ ...prev, priceUsd: data[id] })))
   }, [query])
 
   if (!values) return (
@@ -39,6 +43,7 @@ const Asset: NextPage = () => {
     <div className="flex flex-col items-center">
       <h1>{values.name}</h1>
       <small><h2>{values.symbol}</h2></small>
+      <span>{values.priceUsd}</span>
       <Charts width={300} height={100} data={history || []} name={values.name} />
     </div>
   )
