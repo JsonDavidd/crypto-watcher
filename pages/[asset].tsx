@@ -29,8 +29,10 @@ const Asset: NextPage = () => {
       setHistory(json.data)
     })().catch(console.error)
 
-    onPricesUpdate([id], (data) =>
-      setValues((prev) => prev && ({ ...prev, priceUsd: data[id] })))
+    onPricesUpdate([id], (data) => {
+      setValues((prev) => prev && ({ ...prev, priceUsd: data[id] }))
+      setHistory((prev) => prev && [...prev, { priceUsd: data[id], time: Date.now() }])
+    })
   }, [query])
 
   if (!values) return (
