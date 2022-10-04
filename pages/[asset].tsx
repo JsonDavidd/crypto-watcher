@@ -46,7 +46,7 @@ const Asset: NextPage = () => {
       <h1>{values.name}</h1>
       <small><h2>{values.symbol}</h2></small>
       <span>{values.priceUsd}</span>
-      <Charts width={300} height={100} data={history || []} name={values.name} />
+      <Charts width={300} height={100} data={history || []} name={values.name} zoom={16} />
     </div>
   )
 }
