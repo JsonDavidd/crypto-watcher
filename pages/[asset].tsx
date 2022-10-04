@@ -3,10 +3,11 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Charts from "../components/charts"
 import AssetsModel from "../lib/types/assets-model"
+import HistoryDataModel from "../lib/types/history-data-model"
 
 const Asset: NextPage = () => {
   const [values, setValues] = useState<AssetsModel>()
-  const [history, setHistory] = useState<{ priceUsd: number, time: number }[]>()
+  const [history, setHistory] = useState<HistoryDataModel>()
   const { query } = useRouter()
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const Asset: NextPage = () => {
     <div className="flex flex-col items-center">
       <h1>{values.name}</h1>
       <small><h2>{values.symbol}</h2></small>
-      <Charts width={300} height={100} coords={history?.map((x) => x.priceUsd / 1000) || []} />
+      <Charts width={300} height={100} data={history || []} name={values.name} />
     </div>
   )
 }
