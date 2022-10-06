@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import fetchRankedAssets from "../lib/fetch-ranked-assets"
+import formatPrice from "../lib/format-price"
 import getPricesFromAssets from "../lib/get-prices-from-assets"
 import onPricesUpdate from "../lib/on-prices-update"
 import AssetsModel from "../lib/types/assets-model"
@@ -56,7 +57,7 @@ const Home: NextPage = () => {
                 <span>{name}</span>
                 <small>{symbol}</small>
               </div>
-              <span>{priceUsd} USD</span>
+              <span>{formatPrice(priceUsd)} USD</span>
             </a></Link>
           </li>
         ))}

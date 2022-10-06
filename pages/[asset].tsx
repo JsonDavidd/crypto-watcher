@@ -2,6 +2,7 @@ import { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Charts from "../components/charts"
+import formatPrice from "../lib/format-price"
 import onPricesUpdate from "../lib/on-prices-update"
 import AssetsModel from "../lib/types/assets-model"
 import HistoryDataModel from "../lib/types/history-data-model"
@@ -46,7 +47,7 @@ const Asset: NextPage = () => {
     <div className="flex flex-col items-center">
       <h1>{values.name}</h1>
       <small><h2>{values.symbol}</h2></small>
-      <span>{values.priceUsd}</span>
+      <span>{formatPrice(values.priceUsd)}</span>
       <div className="flex items-centered gap-4">
         <span>Zoom</span>
         <button onClick={() => history && history.length / (zoom * 2) > 8 && setZoom(zoom * 2)} className="text-lg font-bold">+</button>
